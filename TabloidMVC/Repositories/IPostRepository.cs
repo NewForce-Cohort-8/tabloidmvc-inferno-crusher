@@ -9,5 +9,7 @@ namespace TabloidMVC.Repositories
         List<Post> GetAllPublishedPosts();
         Post GetPublishedPostById(int id);
         Post GetUserPostById(int id, int userProfileId);
+        //added GetCurrentUserPosts here after adding it to PostRepository.cs
+        List<Post> GetCurrentUserPosts(int currentUserId);
     }
 }
