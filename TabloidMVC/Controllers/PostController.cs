@@ -25,6 +25,16 @@ namespace TabloidMVC.Controllers
             var posts = _postRepository.GetAllPublishedPosts();
             return View(posts);
         }
+// Adds new action method named "My Posts" which renders an HTML page with only posts authored by the currently logged in user
+        public IActionResult MyPosts()
+        {
+            //get currently logged in user's userProfileId and store it in the userId variable
+            int userId = GetCurrentUserProfileId();
+            //get all posts that are authored by the currently logged in user, by using the GetCurrentUserPosts method from the postRepository, and passing in the current user's userProfileId as an argument
+            var posts = _postRepository.GetCurrentUserPosts(userId);
+            //return those posts to the View associated with the MyPosts action method, which is Views>Post>MyPosts.cshtml
+            return View(posts);
+        }
 
         public IActionResult Details(int id)
         {
