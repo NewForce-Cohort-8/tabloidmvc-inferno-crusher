@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System.Security.Claims;
+using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
@@ -78,6 +79,31 @@ namespace TabloidMVC.Controllers
             }
         }
 
+        // GET: PostController/Delete/3
+        public ActionResult Delete(int id)
+            //I changed Post post in line 75 to var post because it matched language i saw up above. I'm unsure if this is the right move
+        {
+            var post = _postRepository.GetPublishedPostById(id);
+
+            return View(post);
+        }
+
+        // POST: PostController/Delete/3
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, Post post)
+        {
+            try
+            {
+                _postRepository.DeletePost(id);
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View(post);
+            }
+        }
         private int GetCurrentUserProfileId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
