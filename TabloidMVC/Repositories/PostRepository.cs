@@ -34,7 +34,7 @@ namespace TabloidMVC.Repositories
                               LEFT JOIN UserProfile u ON p.UserProfileId = u.id
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
                         WHERE IsApproved = 1 AND PublishDateTime < SYSDATETIME()
-                        ORDER BY p.CreateDateTime DESC"; // Added order by creation date in descending order 
+                        ORDER BY p.PublishDateTime DESC"; // Added order by PublishDateTime in descending order 
 
 
                     var reader = cmd.ExecuteReader();
