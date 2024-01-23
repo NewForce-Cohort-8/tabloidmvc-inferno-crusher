@@ -26,8 +26,11 @@ namespace TabloidMVC.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                       SELECT * FROM Comment
-                       WHERE PostId = @postId";
+                       SELECT c.Id, c.PostId, c.UserProfileId, c.Subject, c.Content, c.CreateDateTime, u.Id AS UserId, u.DisplayName, u.FirstName, u.LastName, u.Email, u.CreateDateTime AS UserCreateDate, u.ImageLocation, u.UserTypeId 
+                       FROM Comment c
+                       LEFT JOIN UserProfile u ON c.UserProfileId = u.Id
+                       WHERE c.PostId = @postId
+                       ORDER BY c.CreateDateTime DESC";
 
                     cmd.Parameters.AddWithValue("@postId", postId);
                     var reader = cmd.ExecuteReader();
@@ -43,7 +46,18 @@ namespace TabloidMVC.Repositories
                             UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
                             Subject = reader.GetString(reader.GetOrdinal("Subject")),
                             Content = reader.GetString(reader.GetOrdinal("Content")),
-                            CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime"))
+                            CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                            UserProfile = new UserProfile
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("UserId")),
+                                DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                Email = reader.GetString(reader.GetOrdinal("Email")),
+                                CreateDateTime = reader.GetDateTime(reader.GetOrdinal("UserCreateDate")),
+                                ImageLocation = null,
+                                UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId"))
+                            }
                         };
 
                         comments.Add(comment);

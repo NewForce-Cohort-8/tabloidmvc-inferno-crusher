@@ -1,10 +1,24 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using TabloidMVC.Models.ViewModels;
+using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
 {
     public class CommentController : Controller
     {
+
+        private readonly IPostRepository _postRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICommentRepository _commentRepository;
+
+        public CommentController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository)
+        {
+            _postRepository = postRepository;
+            _categoryRepository = categoryRepository;
+            _commentRepository = commentRepository;
+        }
         // GET: CommentController
         public ActionResult Index()
         {
@@ -14,7 +28,25 @@ namespace TabloidMVC.Controllers
         // GET: CommentController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            int userId = GetCurrentUserProfileId();
+            var post = _postRepository.GetPublishedPostById(id);
+            var comments = _commentRepository.GetAllPostComments(id);
+
+            if (post == null)
+            {
+                post = _postRepository.GetUserPostById(id, userId);
+                if (post == null)
+                {
+                    return NotFound();
+                }
+            }
+
+            var vm = new PostDetailsViewModel();
+            vm.Post = post;
+            vm.Comments = comments;
+            vm.UserId = userId;
+
+            return View(vm);
         }
 
         // GET: CommentController/Create
@@ -78,6 +110,12 @@ namespace TabloidMVC.Controllers
             {
                 return View();
             }
+        }
+
+        private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }
