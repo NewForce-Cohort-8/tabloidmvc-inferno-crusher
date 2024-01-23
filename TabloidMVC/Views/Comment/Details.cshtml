@@ -43,13 +43,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CreateDateTime)
             </td>
+@*                
+        Leaving this here for future use, when author users are added to the app, and this will be refactored so that authors can only edit/delete their own comments. Commenting this out for now because all users can be treated as admins for the moment while we try to reach MVP.
+
                 @if (Model.UserId == item.UserProfileId)
                 {
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                         @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-                }
+                    </td>
+                } *@
         </tr>
 }
     </tbody>
