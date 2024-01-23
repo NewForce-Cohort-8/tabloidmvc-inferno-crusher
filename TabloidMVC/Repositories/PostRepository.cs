@@ -50,6 +50,47 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        //new method - which is largely just the GetAllPublishedPosts method above, but slightly altered to take in an int as a parameter, and then only return ALL posts (published and unpublished) that are authored by the user whose ID matches that parameter, and order it by CreateDateTime with the most recently created posts appearing on top of the list.
+        public List<Post> GetCurrentUserPosts(int currentUserId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                       SELECT p.Id, p.Title, p.Content, 
+                              p.ImageLocation AS HeaderImage,
+                              p.CreateDateTime, p.PublishDateTime, p.IsApproved,
+                              p.CategoryId, p.UserProfileId,
+                              c.[Name] AS CategoryName,
+                              u.FirstName, u.LastName, u.DisplayName, 
+                              u.Email, u.CreateDateTime, u.ImageLocation AS AvatarImage,
+                              u.UserTypeId, 
+                              ut.[Name] AS UserTypeName
+                         FROM Post p
+                              LEFT JOIN Category c ON p.CategoryId = c.id
+                              LEFT JOIN UserProfile u ON p.UserProfileId = u.id
+                              LEFT JOIN UserType ut ON u.UserTypeId = ut.id
+                        WHERE IsApproved = 1 AND p.UserProfileId = @currentUserId
+                        ORDER BY p.CreateDateTime DESC";
+                    cmd.Parameters.AddWithValue("@currentUserId", currentUserId);
+                    var reader = cmd.ExecuteReader();
+
+                    var posts = new List<Post>();
+
+                    while (reader.Read())
+                    {
+                        posts.Add(NewPostFromReader(reader));
+                    }
+
+                    reader.Close();
+
+                    return posts;
+                }
+            }
+        }
+
         public Post GetPublishedPostById(int id)
         {
             using (var conn = Connection)
@@ -196,6 +237,26 @@ namespace TabloidMVC.Repositories
                     }
                 }
             };
+        }
+
+        public void DeletePost(int Id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            DELETE FROM Post
+                            WHERE Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public void Edit(Post post)
