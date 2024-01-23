@@ -215,6 +215,7 @@ namespace TabloidMVC.Repositories
                 Content = reader.GetString(reader.GetOrdinal("Content")),
                 ImageLocation = DbUtils.GetNullableString(reader, "HeaderImage"),
                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
                 PublishDateTime = DbUtils.GetNullableDateTime(reader, "PublishDateTime"),
                 CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
                 Category = new Category()
@@ -285,7 +286,7 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@ImageLocation",post.ImageLocation);
                     cmd.Parameters.AddWithValue("@CreateDateTime", post.CreateDateTime);
                     cmd.Parameters.AddWithValue("@PublishDateTime", post.PublishDateTime);
-                    cmd.Parameters.AddWithValue("@IsApproved", post.IsApproved == true? 1 : 0);
+                    cmd.Parameters.AddWithValue("@IsApproved", post.IsApproved);
                     cmd.Parameters.AddWithValue("@CategoryId", post.CategoryId);
                     cmd.Parameters.AddWithValue("@UserProfileId", post.UserProfileId);
                     cmd.Parameters.AddWithValue("@id", post.Id);

@@ -32,6 +32,11 @@
                     <span asp-validation-for="Post.UserProfileId" class="text-danger"></span>
                 </div>
                 <div class="form-group" hidden>
+                    <label asp-for="Post.IsApproved" class="control-label"></label>
+                    <input asp-for="Post.IsApproved" class="form-control" />
+                    <span asp-validation-for="Post.IsApproved" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
                     <label asp-for="Post.CreateDateTime" class="control-label"></label>
                     <input asp-for="Post.CreateDateTime" class="form-control" />
                     <span asp-validation-for="Post.CreateDateTime" class="text-danger"></span>
