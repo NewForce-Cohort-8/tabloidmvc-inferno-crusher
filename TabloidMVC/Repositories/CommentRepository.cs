@@ -1,4 +1,6 @@
-﻿using TabloidMVC.Models;
+﻿using Microsoft.Extensions.Hosting;
+using TabloidMVC.Models;
+using TabloidMVC.Utils;
 
 namespace TabloidMVC.Repositories
 {
@@ -8,8 +10,27 @@ namespace TabloidMVC.Repositories
 
         public void Add(Comment comment)
         {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO Comment (Subject, Content, PostId, UserProfileId, CreateDateTime)
+                        OUTPUT INSERTED.ID
+                        VALUES (
+                            @Subject, @Content, @PostId, @UserProfileId, @CreateDateTime)";
+                    cmd.Parameters.AddWithValue("@Subject", comment.Subject);
+                    cmd.Parameters.AddWithValue("@Content", comment.Content);
+                    cmd.Parameters.AddWithValue("@CreateDateTime", comment.CreateDateTime);
+                    cmd.Parameters.AddWithValue("@PostId", comment.PostId);
+                    cmd.Parameters.AddWithValue("@UserProfileId", comment.UserProfileId);
 
+                    comment.Id = (int)cmd.ExecuteScalar();
+                }
+            }
         }
+
         public void Update(Comment comment)
         {
 

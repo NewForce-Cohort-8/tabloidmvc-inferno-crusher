@@ -22,6 +22,19 @@
                 <a asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fas fa-trash"></i>
                 </a>
+                <button style="border: none; background-color: white;">
+                    <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Create">
+                        Add Comment
+                    </a>
+                </button>
+                @if (Model.Comments.Count > 0)
+                {
+                    <button style="border: none; background-color: white;">
+                        <a asp-controller="Comment" asp-action="Details" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Details">
+                            View Comments
+                        </a>
+                    </button>
+                }
             </div>
         </section>
         <hr />
@@ -36,12 +49,5 @@
         <section class="row post__content">
             <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Post.Content)</p>
         </section>
-        @if(Model.Comments.Count > 0)
-        {
-
-            <a asp-controller="Comment" asp-action="Details" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Details">
-                <button>View Comments</button>
-            </a>
-        }
     </div>
 </div>
