@@ -49,6 +49,9 @@
                     <div>
                         <a asp-controller="Comment" asp-action="Delete" asp-route-id="@item.Id" title="Delete" style="border: none; background-color: none;"><button class="btn-danger btn">Delete?</button></a>
                     </div>
+                    <div>
+                        <a asp-controller="Comment" asp-action="Edit" asp-route-id="@item.Id" title="Edit" style="border: none; background-color: none;"><button class="btn-danger btn">Edit</button></a>
+                    </div>
             </td>
 @*                
         Leaving this here for future use, when author users are added to the app, and this will be refactored so that authors can only edit/delete their own comments. Commenting this out for now because all users can be treated as admins for the moment while we try to reach MVP.
