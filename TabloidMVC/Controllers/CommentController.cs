@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.VisualBasic;
 using System.Security.Claims;
 using TabloidMVC.Models;
@@ -113,21 +114,27 @@ namespace TabloidMVC.Controllers
         // GET: CommentController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var comment = _commentRepository.GetCommentById(id);
+
+            return View(comment);
         }
 
         // POST: CommentController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Comment comment)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                Comment commentToDelete = _commentRepository.GetCommentById(id);
+                int postId = commentToDelete.PostId;
+                _commentRepository.Delete(id);
+
+                return RedirectToAction("Details", new { id = postId });
             }
             catch
             {
-                return View();
+                return View(comment);
             }
         }
 
