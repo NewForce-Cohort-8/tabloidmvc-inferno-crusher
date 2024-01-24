@@ -12,5 +12,6 @@ namespace TabloidMVC.Repositories
         void DeletePost(int id);
         //added GetCurrentUserPosts here after adding it to PostRepository.cs
         List<Post> GetCurrentUserPosts(int currentUserId);
+        void Edit(Post post);
     }
 }
