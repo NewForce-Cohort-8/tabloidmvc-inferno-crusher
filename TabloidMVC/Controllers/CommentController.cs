@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using System.Security.Claims;
+using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
@@ -12,12 +14,14 @@ namespace TabloidMVC.Controllers
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
-        public CommentController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository)
+        public CommentController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
             _commentRepository = commentRepository;
+            _userProfileRepository = userProfileRepository;
         }
         // GET: CommentController
         public ActionResult Index()
@@ -50,23 +54,38 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: CommentController/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
-            return View();
+            int userId = GetCurrentUserProfileId();
+            var post = _postRepository.GetPublishedPostById(id);
+
+            var comment = new Comment();
+            var vm = new CommentCreateViewModel();
+            vm.Post = post;
+            vm.Comment = comment;
+            vm.Comment.PostId = vm.Post.Id;
+            vm.Comment.UserProfileId = userId;
+
+            return View(vm);
         }
 
         // POST: CommentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(CommentCreateViewModel vm)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                vm.Comment.CreateDateTime = DateAndTime.Now;
+                vm.Comment.UserProfile = _userProfileRepository.GetUserById(vm.Comment.UserProfileId);
+                var comments = _commentRepository.GetAllPostComments(vm.Comment.PostId);
+                _commentRepository.Add(vm.Comment);
+
+                return RedirectToAction("Details", new { id = vm.Comment.PostId });
             }
             catch
             {
-                return View();
+                return View(vm);
             }
         }
 

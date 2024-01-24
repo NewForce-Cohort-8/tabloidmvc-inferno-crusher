@@ -6,9 +6,11 @@
 <h1>Comments for Post: @Model.Post.Title</h1>
 
 <p>
+    <button style="border: none; background-color: white;">
     <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Details">
-        <button>Back To Post</button>
+        Back To Post
     </a>
+    </button>
 </p>
 <table class="table">
     <thead>
