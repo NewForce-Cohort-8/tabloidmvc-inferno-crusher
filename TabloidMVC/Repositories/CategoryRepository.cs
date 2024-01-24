@@ -7,6 +7,8 @@ namespace TabloidMVC.Repositories
     public class CategoryRepository : BaseRepository, ICategoryRepository
     {
         public CategoryRepository(IConfiguration config) : base(config) { }
+
+        //get all Category options and add them to an ordered list
         public List<Category> GetAll()
         {
             using (var conn = Connection)
@@ -14,7 +16,7 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT id, name FROM Category";
+                    cmd.CommandText = "SELECT id, name FROM Category ORDER BY name";
                     var reader = cmd.ExecuteReader();
 
                     var categories = new List<Category>();
