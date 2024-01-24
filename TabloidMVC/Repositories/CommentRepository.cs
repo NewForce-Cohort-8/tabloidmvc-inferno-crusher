@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Hosting;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
 
@@ -37,6 +38,22 @@ namespace TabloidMVC.Repositories
         }
         public void Delete(int id)
         {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            DELETE FROM Comment
+                            WHERE Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
 
         }
         public List<Comment> GetAllPostComments(int postId)
@@ -87,6 +104,59 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return comments;
+                }
+            }
+        }
+
+        public Comment GetCommentById(int commentId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                       SELECT c.Id, c.PostId, c.UserProfileId, c.Subject, c.Content, c.CreateDateTime, u.Id AS UserId, u.DisplayName, u.FirstName, u.LastName, u.Email, u.CreateDateTime AS UserCreateDate, u.ImageLocation, u.UserTypeId 
+                       FROM Comment c
+                       LEFT JOIN UserProfile u ON c.UserProfileId = u.Id
+                       WHERE c.Id = @commentId
+                       ORDER BY c.CreateDateTime DESC";
+
+                    cmd.Parameters.AddWithValue("@commentId", commentId);
+                    var reader = cmd.ExecuteReader();
+
+                    Comment comment = null;
+
+                    while (reader.Read())
+                    {
+                        if (comment == null)
+                        {
+                            comment = new Comment
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
+                                UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                                Subject = reader.GetString(reader.GetOrdinal("Subject")),
+                                Content = reader.GetString(reader.GetOrdinal("Content")),
+                                CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                                UserProfile = new UserProfile
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("UserId")),
+                                    DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                    Email = reader.GetString(reader.GetOrdinal("Email")),
+                                    CreateDateTime = reader.GetDateTime(reader.GetOrdinal("UserCreateDate")),
+                                    ImageLocation = null,
+                                    UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId"))
+                                }
+                            };
+                        }
+                    }
+
+                    reader.Close();
+
+                    return comment;
                 }
             }
         }
