@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Add a Comment to @Model.Post.Title</h1>
 
 <h4>Comment</h4>
 <hr />
@@ -43,9 +43,12 @@
                 <span asp-validation-for="@Model.Comment.CreateDateTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+        <div>
+            <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.Post.Id" title="Details" style="border: none; background-color: none;"><button class="btn-danger btn">Cancel</button></a>
+        </div>
     </div>
 </div>
 
