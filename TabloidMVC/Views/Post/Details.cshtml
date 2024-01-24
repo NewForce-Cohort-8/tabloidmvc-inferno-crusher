@@ -49,5 +49,61 @@
         <section class="row post__content">
             <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Post.Content)</p>
         </section>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Commenter
+                    </th>
+                    <th>
+                        Comment Subject
+                    </th>
+                    <th>
+                        Comment Content
+                    </th>
+                    <th>
+                        Comment Added On
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model.Comments)
+        {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserProfile.DisplayName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Content)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreateDateTime)
+                        </td>
+                        <td>
+                            <div>
+                                <a asp-controller="Comment" asp-action="Delete" asp-route-id="@item.Id" title="Delete" style="border: none; background-color: none;"><button class="btn-danger btn">Delete?</button></a>
+                            </div>
+                            <div>
+                                <a asp-controller="Comment" asp-action="Edit" asp-route-id="@item.Id" title="Edit" style="border: none; background-color: none;"><button class="btn-danger btn">Edit</button></a>
+                            </div>
+                        </td>
+                        @*
+                    Leaving this here for future use, when author users are added to the app, and this will be refactored so that authors can only edit/delete their own comments. Commenting this out for now because all users can be treated as admins for the moment while we try to reach MVP.
+
+                    @if (Model.UserId == item.UserProfileId)
+                    {
+                    <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                    } *@
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
