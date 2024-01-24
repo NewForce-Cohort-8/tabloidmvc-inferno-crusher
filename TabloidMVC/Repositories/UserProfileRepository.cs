@@ -98,5 +98,33 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+        public List<UserProfile> GetAll()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT FirstName, LastName, DisplayName FROM UserProfile ORDER BY DisplayName";
+                    var reader = cmd.ExecuteReader();
+                    
+                    var userProfiles = new List<UserProfile>();
+
+                    while (reader.Read())
+                    {
+                        userProfiles.Add(new UserProfile()
+                        {
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                        });
+                    }
+
+                    reader.Close();
+
+                    return userProfiles;
+                }
+            }
+        }
     }
 }
