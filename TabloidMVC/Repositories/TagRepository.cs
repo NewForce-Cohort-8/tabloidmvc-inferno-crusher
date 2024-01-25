@@ -44,6 +44,62 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+        public Tag GetUserTagById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                       SELECT  id, Name FROM Tag
+                        WHERE id = @id ";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    var reader = cmd.ExecuteReader();
+
+                    Tag tag = null;
+
+                    if (reader.Read())
+                    {
+                        tag = NewTagFromReader(reader);
+                    }
+
+                    reader.Close();
+
+                    return tag;
+                }
+            }
+        }
+
+        private Tag NewTagFromReader(SqlDataReader reader)
+        {
+            return new Tag()
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                Name = reader.GetString(reader.GetOrdinal("Name")),
+            };
+        }
+        public void DeleteTag(int Id)
+            {
+    using (SqlConnection conn = Connection)
+    {
+        conn.Open();
+
+        using (SqlCommand cmd = conn.CreateCommand())
+        {
+            cmd.CommandText = @"
+                            DELETE FROM Tag
+                            WHERE Id = @id
+                        ";
+
+            cmd.Parameters.AddWithValue("@id", Id);
+
+            cmd.ExecuteNonQuery();
+        }
+    }
+}
     }
 }
 
@@ -113,24 +169,5 @@ namespace TabloidMVC.Repositories
 //            };
 //        }
 
-//        public void DeletePost(int Id)
-//        {
-//            using (SqlConnection conn = Connection)
-//            {
-//                conn.Open();
-
-//                using (SqlCommand cmd = conn.CreateCommand())
-//                {
-//                    cmd.CommandText = @"
-//                            DELETE FROM Post
-//                            WHERE Id = @id
-//                        ";
-
-//                    cmd.Parameters.AddWithValue("@id", Id);
-
-//                    cmd.ExecuteNonQuery();
-//                }
-//            }
-//        }
 //    }
 //}

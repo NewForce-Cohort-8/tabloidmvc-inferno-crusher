@@ -8,8 +8,8 @@ namespace TabloidMVC.Repositories
         //void Add(Tag tag);
         List<Tag> GetAllPublishedTags();
         //Post GetPublishedTagById(int id);
-        //Post GetUserPostById(int id, int userProfileId);
-        //void DeletePost(int id);
+        Tag GetUserTagById(int id);
+        void DeleteTag(int id);
         //added GetCurrentUserPosts here after adding it to PostRepository.cs
     }
 }
