@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -20,11 +22,22 @@ namespace TabloidMVC.Controllers
 
             return View(userProfiles);
         }
-        public ActionResult View(int id)
+        public ActionResult Details(int id)
         {
+            var user = _userProfileRepository.GetUserById(id);
+
             
-           var userProfile = _userProfileRepository.GetUserById(id);
-            return View(userProfile);
+
+            if (user.Id == null)
+            {
+                int userId = user.Id;
+                if (userId == null)
+                {
+                    return NotFound();
+                }
+            }
+
+            return View(user);
         }
     }
 }
