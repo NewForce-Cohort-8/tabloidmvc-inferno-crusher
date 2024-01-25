@@ -1,0 +1,59 @@
+﻿@model TabloidMVC.Models.UserProfile
+@{
+    ViewData["Title"] = $"User Profile - {@Model.FullName}";
+}
+
+<h1>Comments for Post: @Model.FullName</h1>
+
+<p>
+    <button style="border: none; background-color: white;">
+        <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.FullName" class="btn btn-outline-primary mx-1" title="Details">
+            Back To Post
+        </a>
+    </button>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Full Name
+            </th>
+            <th>
+                Image
+            </th>
+            <th>
+                Display Name
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Creation Date
+            </th>
+            <th>
+                Profile Type
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.ImageLocation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.DisplayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.Email)
+                </td>
+                @*
+             *@
+            </tr>
+        }
+    </tbody>
+</table>
