@@ -19,7 +19,7 @@ namespace TabloidMVC.Repositories
                 {
                     // SQL query to select category and post information
                     cmd.CommandText = @"SELECT c.Id, c.[Name], p.CategoryId, p.Title FROM Category c 
-                     LEFT JOIN Post p ON c.id = p.CategoryId";
+                     LEFT JOIN Post p ON c.id = p.CategoryId ORDER BY c.Name";
 
                     var reader = cmd.ExecuteReader();
 
@@ -69,6 +69,31 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return categories;
+                }
+            }
+        }
+
+
+        //add a category
+        public void AddCategory(Category category)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    INSERT INTO Category ([Name])
+                    OUTPUT INSERTED.ID
+                    VALUES (@name);
+                ";
+
+                    cmd.Parameters.AddWithValue("@name", category.Name);
+
+
+                    int id = (int)cmd.ExecuteScalar();
+
+                    category.Id = id;
                 }
             }
         }
