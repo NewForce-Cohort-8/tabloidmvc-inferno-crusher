@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TabloidMVC.Models.Category>
+﻿@model IEnumerable<TabloidMVC.Models.Tag>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create Category</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -32,12 +32,8 @@
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |  @* added the if statement to only render the delete button if there are no posts attached *@
-                    @if (item.Posts.Count == 0)
-                    {
-                      @Html.ActionLink("Delete", "Delete", new { id=item.Id }) 
-                    }
-     
+                    @Html.ActionLink("Details", "Details", new { id = item.Id}) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
             </td>
         </tr>
 }

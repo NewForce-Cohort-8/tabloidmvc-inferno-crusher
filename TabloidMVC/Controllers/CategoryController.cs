@@ -36,18 +36,20 @@ namespace TabloidMVC.Controllers
             return View();
         }
 
-        // POST: CategoryController/Create
+        // POST: CategoryController/Create   
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Category category)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _categoryRepository.AddCategory(category);
+
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(category);
             }
         }
 

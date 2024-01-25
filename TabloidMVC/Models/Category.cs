@@ -6,5 +6,7 @@
         public string Name { get; set; }
         public List<Post> Posts { get; set; } = new List<Post>();
 
+        public List<Category> Categories { get; set;}
+
     }
 }

@@ -160,5 +160,33 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
+        public void Edit(Comment comment)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE Comment
+                        SET Subject = @Subject,
+                        Content = @Content,
+                        CreateDateTime = @CreateDateTime,
+                        UserProfileId = @UserProfileId
+                        WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@Subject", comment.Subject);
+                    cmd.Parameters.AddWithValue("@Content", comment.Content);
+                    cmd.Parameters.AddWithValue("@PostId", comment.PostId);
+                    cmd.Parameters.AddWithValue("@CreateDateTime", comment.CreateDateTime);
+                    cmd.Parameters.AddWithValue("@UserProfileId", comment.UserProfileId);
+                    cmd.Parameters.AddWithValue("@id", comment.Id);
+
+                    cmd.ExecuteNonQuery();
+
+
+                }
+            }
+        }
     }
 }
