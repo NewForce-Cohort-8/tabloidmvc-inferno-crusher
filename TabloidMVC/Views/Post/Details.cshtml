@@ -49,29 +49,31 @@
         <section class="row post__content">
             <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Post.Content)</p>
         </section>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Commenter
-                    </th>
-                    <th>
-                        Comment Subject
-                    </th>
-                    <th>
-                        Comment Content
-                    </th>
-                    <th>
-                        Comment Added On
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-        @foreach (var item in Model.Comments)
+        @if (Model.Comments.Count > 0)
         {
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
+                        <th>
+                            Commenter
+                        </th>
+                        <th>
+                            Comment Subject
+                        </th>
+                        <th>
+                            Comment Content
+                        </th>
+                        <th>
+                            Comment Added On
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Comments)
+                    {
+                        <tr>
+                            <td>
                             @Html.DisplayFor(modelItem => item.UserProfile.DisplayName)
                         </td>
                         <td>
@@ -105,5 +107,6 @@
                 }
             </tbody>
         </table>
+        }
     </div>
 </div>
