@@ -6,7 +6,7 @@
 <h1>Comments for Post: @Model.Post.Title</h1>
 
 <p>
-    <button style="border: none; background-color: white;">
+    <button style="border: none;">
     <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Details">
         Back To Post
     </a>
@@ -48,6 +48,9 @@
             <td>
                     <div>
                         <a asp-controller="Comment" asp-action="Delete" asp-route-id="@item.Id" title="Delete" style="border: none; background-color: none;"><button class="btn-danger btn">Delete?</button></a>
+                    </div>
+                    <div>
+                        <a asp-controller="Comment" asp-action="Edit" asp-route-id="@item.Id" title="Edit" style="border: none; background-color: none;"><button class="btn-danger btn">Edit</button></a>
                     </div>
             </td>
 @*                
