@@ -1,4 +1,59 @@
-﻿@page
-@model TabloidMVC.Views.UserProfile.DetailsModel
+@model TabloidMVC.Models.UserProfile
 @{
+    ViewData["Title"] = $"User Profiles - {@Model.Id}";
 }
+
+<h1>User: @Model.FullName</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Full Name
+            </th>
+            <th>
+                Image
+            </th>
+            <th>
+                Display Name
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Creation Date
+            </th>
+            <th>
+                Profile Type
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.ImageLocation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.DisplayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.CreateDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.UserType.Name)
+                </td>
+                @*
+             *@
+            </tr>
+        }
+    </tbody>
+</table>
