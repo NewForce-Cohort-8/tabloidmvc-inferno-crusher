@@ -105,7 +105,7 @@ namespace TabloidMVC.Controllers
             try
             {
                 _commentRepository.Edit(comment);
-                return RedirectToAction("Details", new { id = comment.PostId });
+                return RedirectToAction("Details", "Post", new { id = comment.PostId });
             }
             catch (Exception ex)
             {
