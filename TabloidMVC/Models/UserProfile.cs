@@ -18,5 +18,6 @@
                 return $"{FirstName} {LastName}";
             }
         }
+        public string UserTypeName { get; set; }
     }
 }

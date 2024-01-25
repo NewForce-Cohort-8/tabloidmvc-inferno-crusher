@@ -105,7 +105,7 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT FirstName, LastName, DisplayName FROM UserProfile ORDER BY DisplayName";
+                    cmd.CommandText = "SELECT u.FirstName, u.LastName, u.DisplayName, u.UserTypeId, ut.Name as UserTypeName FROM UserProfile u JOIN UserType ut On u.UserTypeId = ut.Id ORDER BY DisplayName";
                     var reader = cmd.ExecuteReader();
                     
                     var userProfiles = new List<UserProfile>();
@@ -117,6 +117,7 @@ namespace TabloidMVC.Repositories
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                            UserTypeName = reader.GetString(reader.GetOrdinal("UserTypeName")),
                         });
                     }
 
