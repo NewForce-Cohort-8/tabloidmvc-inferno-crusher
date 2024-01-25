@@ -1,64 +1,63 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.VisualBasic;
+using System.Security.Claims;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
 {
-    public class CategoryController : Controller
+    public class TagController : Controller
     {
-        private readonly ICategoryRepository _categoryRepository;
-       
-        // ASP.NET will give us an instance of our Category Repository. This is called "Dependency Injection"
-        public CategoryController(ICategoryRepository categoryRepository)
+        private readonly ITagRepository _tagRepository;
+
+        public TagController(ITagRepository tagRepository)
         {
-            _categoryRepository = categoryRepository;
+            _tagRepository = tagRepository;
         }
 
-        //Gets all the categories in a table, converts it to an ordered list and passes it off to the view
-        public ActionResult Index()
+        public IActionResult Index()
         {
-            List<Category> categories = _categoryRepository.GetAll();
-
-            return View(categories);
+            var tags = _tagRepository.GetAllPublishedTags();
+            return View(tags);
         }
 
-        // GET: CategoryController/Details/5
+        // GET: TagController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: CategoryController/Create
+        // GET: TagController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: CategoryController/Create   
+        // POST: TagController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Category category)
+        public ActionResult Create(IFormCollection collection)
         {
             try
             {
-                _categoryRepository.AddCategory(category);
-
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch
             {
-                return View(category);
+                return View();
             }
         }
 
-        // GET: CategoryController/Edit/5
+        // GET: TagController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: CategoryController/Edit/5
+        // POST: TagController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -73,13 +72,13 @@ namespace TabloidMVC.Controllers
             }
         }
 
-        // GET: CategoryController/Delete/5
+        // GET: TagController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: CategoryController/Delete/5
+        // POST: TagController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
